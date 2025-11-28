@@ -1,4 +1,5 @@
 import { useRef, useState, type ChangeEvent } from 'react';
+import { toast } from 'sonner';
 
 const generateRandomPassword = () => {
   const length = 12;
@@ -71,6 +72,8 @@ export const usePasswordValidation = () => {
     if (!inputRef.current) return;
     inputRef.current.select();
     navigator.clipboard.writeText(password);
+
+    toast.success('Contraseña copiada al portapapeles');
   };
 
   const handleShowPassword = () => {
