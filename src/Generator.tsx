@@ -2,8 +2,13 @@ import { usePasswordValidation } from './usePasswordValidation';
 import { ValidationItem } from './ValidationItem';
 
 export const Generator = () => {
-  const { password, handleInputChange, active, validations } =
-    usePasswordValidation();
+  const {
+    password,
+    handleInputChange,
+    handleGeneratePassword,
+    active,
+    validations,
+  } = usePasswordValidation();
 
   const showError = password.length > 0;
 
@@ -12,8 +17,12 @@ export const Generator = () => {
       <div className="generator-container">
         <h1>Generator</h1>
         <div className="input-container">
-          <input type="text" value={password} onChange={handleInputChange} />
-          <button>Generar</button>
+          <input
+            type="password"
+            value={password}
+            onChange={handleInputChange}
+          />
+          <button onClick={() => handleGeneratePassword()}>Generar</button>
         </div>
         <div className="options-container">
           <ul>
