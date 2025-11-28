@@ -25,7 +25,9 @@ export const Generator = () => {
 
     checkLength(value.length);
     checkUppercase(value);
-    // checkLowercase(value);
+    checkLowercase(value);
+    checkNumber(value);
+    checkSymbol(value);
   };
 
   const checkLength = (inputLength: number) => {
@@ -50,6 +52,39 @@ export const Generator = () => {
     }
   };
 
+  const checkLowercase = (inputValue: string) => {
+    const hasLowercase = /[a-z]/.test(inputValue);
+    if (!isLowercase && hasLowercase) {
+      setActive((prev) => prev + 1);
+      setIsLowercase(true);
+    } else if (isLowercase && !hasLowercase) {
+      setActive((prev) => prev - 1);
+      setIsLowercase(false);
+    }
+  };
+
+  const checkNumber = (inputValue: string) => {
+    const hasNumber = /[0-9]/.test(inputValue);
+    if (!isNumbers && hasNumber) {
+      setActive((prev) => prev + 1);
+      setIsNumbers(true);
+    } else if (isNumbers && !hasNumber) {
+      setActive((prev) => prev - 1);
+      setIsNumbers(false);
+    }
+  };
+
+  const checkSymbol = (inputValue: string) => {
+    const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':",./<>?]/.test(inputValue);
+    if (!isSymbols && hasSymbol) {
+      setActive((prev) => prev + 1);
+      setIsSymbols(true);
+    } else if (isSymbols && !hasSymbol) {
+      setActive((prev) => prev - 1);
+      setIsSymbols(false);
+    }
+  };
+
   const renderLengthItem = () => {
     if (password.length >= 8) {
       return (
@@ -64,15 +99,52 @@ export const Generator = () => {
     }
   };
 
-  const renderUppercaseItem = () => {
+  const renderUpperCaseItem = () => {
     if (isUppercase) {
       return (
-        <li className="text-green-500">✓ Contiene al menos 1 Mayúsculas</li>
+        <li className="text-green-500">✓ Contiene al menos 1 Mayúscula/s</li>
       );
     } else if (password.length > 0 && !isUppercase) {
-      return <li className="text-red-500">X Contiene al menos 1 Mayúsculas</li>;
+      return (
+        <li className="text-red-500">X Contiene al menos 1 Mayúscula/s</li>
+      );
     } else {
-      return <li>- Contiene al menos 1 Mayúsculas</li>;
+      return <li>- Contiene al menos 1 Mayúscula/s</li>;
+    }
+  };
+  const renderLowerCaseItem = () => {
+    if (isLowercase) {
+      return (
+        <li className="text-green-500">✓ Contiene al menos 1 Minúscula/s</li>
+      );
+    } else if (password.length > 0 && !isLowercase) {
+      return (
+        <li className="text-red-500">X Contiene al menos 1 Minúscula/s</li>
+      );
+    } else {
+      return <li>- Contiene al menos 1 Minúscula/s</li>;
+    }
+  };
+
+  const renderNumberItem = () => {
+    if (isNumbers) {
+      return <li className="text-green-500">✓ Contiene al menos 1 Número/s</li>;
+    } else if (password.length > 0 && !isNumbers) {
+      return <li className="text-red-500">X Contiene al menos 1 Número/s</li>;
+    } else {
+      return <li>- Contiene al menos 1 Número/s</li>;
+    }
+  };
+
+  const renderSymbolItem = () => {
+    if (isSymbols) {
+      return (
+        <li className="text-green-500">✓ Contiene al menos 1 Símbolo/s</li>
+      );
+    } else if (password.length > 0 && !isSymbols) {
+      return <li className="text-red-500">X Contiene al menos 1 Símbolo/s</li>;
+    } else {
+      return <li>- Contiene al menos 1 Símbolo/s</li>;
     }
   };
 
@@ -88,12 +160,12 @@ export const Generator = () => {
           <ul>
             {renderLengthItem()}
 
-            {renderUppercaseItem()}
-            <li>- Contiene al menos 1 Minúsculas</li>
-            <li>- Contiene al menos 1 Símbolo/s</li>
+            {renderUpperCaseItem()}
+            {renderLowerCaseItem()}
+            {renderNumberItem()}
+            {renderSymbolItem()}
           </ul>
-          <p>{active}</p>
-          <button disabled={active !== 4}>Copiar al portapapeles</button>
+          <button disabled={active !== 5}>Copiar al portapapeles</button>
         </div>
       </div>
     </div>
