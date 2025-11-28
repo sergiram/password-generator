@@ -3,59 +3,50 @@ import { useState } from 'react';
 export const Generator = () => {
   const [password, setPassword] = useState<string>('');
   const [minimumLength, setMinimumLength] = useState<boolean>(false);
-  const [uppercase, setUppercase] = useState<boolean>(false);
-  const [lowercase, setLowercase] = useState<boolean>(false);
-  const [numbers, setNumbers] = useState<boolean>(false);
-  const [symbols, setSymbols] = useState<boolean>(false);
+  const [isUppercase, setIsUppercase] = useState<boolean>(false);
+  const [isLowercase, setIsLowercase] = useState<boolean>(false);
+  const [isNumbers, setIsNumbers] = useState<boolean>(false);
+  const [isSymbols, setIsSymbols] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setPassword(value);
+
     if (value === '') {
       setActive(0);
       setMinimumLength(false);
-      setUppercase(false);
-      setLowercase(false);
-      setNumbers(false);
-      setSymbols(false);
+      setIsUppercase(false);
+      setIsLowercase(false);
+      setIsNumbers(false);
+      setIsSymbols(false);
+      return;
     }
-    setPassword(value);
+
     checkLength(value.length);
     checkUppercase(value);
+    // checkLowercase(value);
   };
 
   const checkLength = (inputLength: number) => {
-    if (minimumLength) return;
-
-    if (inputLength >= 8) {
-      setActive(active + 1);
+    const isLengthValid = inputLength >= 8;
+    if (!minimumLength && isLengthValid) {
+      setActive((prev) => prev + 1);
       setMinimumLength(true);
+    } else if (minimumLength && !isLengthValid) {
+      setActive((prev) => prev - 1);
+      setMinimumLength(false);
     }
   };
 
   const checkUppercase = (inputValue: string) => {
-    console.log('uppercase', uppercase);
-    if (uppercase) return;
-
-    if (inputValue.match(/[A-Z]/)) {
-      setActive(active + 1);
-      setUppercase(true);
-    }
-
-    if (uppercase && !inputValue.match(/[A-Z]/)) {
-      console.log('entra aqui');
-
-      setActive(active - 1);
-      setUppercase(false);
-    }
-  };
-
-  const checkLowercase = (inputValue: string) => {
-    if (lowercase) return;
-
-    if (inputValue.match(/[a-z]/)) {
-      setActive(active + 1);
-      setLowercase(true);
+    const hasUppercase = /[A-Z]/.test(inputValue);
+    if (!isUppercase && hasUppercase) {
+      setActive((prev) => prev + 1);
+      setIsUppercase(true);
+    } else if (isUppercase && !hasUppercase) {
+      setActive((prev) => prev - 1);
+      setIsUppercase(false);
     }
   };
 
@@ -73,6 +64,18 @@ export const Generator = () => {
     }
   };
 
+  const renderUppercaseItem = () => {
+    if (isUppercase) {
+      return (
+        <li className="text-green-500">✓ Contiene al menos 1 Mayúsculas</li>
+      );
+    } else if (password.length > 0 && !isUppercase) {
+      return <li className="text-red-500">X Contiene al menos 1 Mayúsculas</li>;
+    } else {
+      return <li>- Contiene al menos 1 Mayúsculas</li>;
+    }
+  };
+
   return (
     <div className="container">
       <div className="generator-container">
@@ -85,7 +88,7 @@ export const Generator = () => {
           <ul>
             {renderLengthItem()}
 
-            <li>- Contiene al menos 1 Mayúsculas</li>
+            {renderUppercaseItem()}
             <li>- Contiene al menos 1 Minúsculas</li>
             <li>- Contiene al menos 1 Símbolo/s</li>
           </ul>
