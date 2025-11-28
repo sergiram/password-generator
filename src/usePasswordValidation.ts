@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
 
 const generateRandomPassword = () => {
   const length = 12;
@@ -35,6 +35,7 @@ export const usePasswordValidation = () => {
   const [isNumbers, setIsNumbers] = useState<boolean>(false);
   const [isSymbols, setIsSymbols] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -65,6 +66,12 @@ export const usePasswordValidation = () => {
     checkLowercase(newPassword);
     checkNumber(newPassword);
     checkSymbol(newPassword);
+  };
+
+  const handleCopyPassword = () => {
+    if (!inputRef.current) return;
+    inputRef.current.select();
+    navigator.clipboard.writeText(password);
   };
 
   const checkLength = (inputLength: number) => {
@@ -126,6 +133,7 @@ export const usePasswordValidation = () => {
     password,
     handleInputChange,
     handleGeneratePassword,
+    handleCopyPassword,
     active,
     validations: {
       minimumLength,
@@ -134,5 +142,6 @@ export const usePasswordValidation = () => {
       isNumbers,
       isSymbols,
     },
+    inputRef,
   };
 };
