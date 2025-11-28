@@ -34,7 +34,7 @@ export const usePasswordValidation = () => {
   const [isLowercase, setIsLowercase] = useState<boolean>(false);
   const [isNumbers, setIsNumbers] = useState<boolean>(false);
   const [isSymbols, setIsSymbols] = useState<boolean>(false);
-  const [active, setActive] = useState<number>(0);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,6 @@ export const usePasswordValidation = () => {
     setPassword(value);
 
     if (value === '') {
-      setActive(0);
       setMinimumLength(false);
       setIsUppercase(false);
       setIsLowercase(false);
@@ -74,66 +73,45 @@ export const usePasswordValidation = () => {
     navigator.clipboard.writeText(password);
   };
 
+  const handleShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const checkLength = (inputLength: number) => {
-    const isLengthValid = inputLength >= 8;
-    if (!minimumLength && isLengthValid) {
-      setActive((prev) => prev + 1);
-      setMinimumLength(true);
-    } else if (minimumLength && !isLengthValid) {
-      setActive((prev) => prev - 1);
-      setMinimumLength(false);
-    }
+    setMinimumLength(inputLength >= 8);
   };
 
   const checkUppercase = (inputValue: string) => {
-    const hasUppercase = /[A-Z]/.test(inputValue);
-    if (!isUppercase && hasUppercase) {
-      setActive((prev) => prev + 1);
-      setIsUppercase(true);
-    } else if (isUppercase && !hasUppercase) {
-      setActive((prev) => prev - 1);
-      setIsUppercase(false);
-    }
+    setIsUppercase(/[A-Z]/.test(inputValue));
   };
 
   const checkLowercase = (inputValue: string) => {
-    const hasLowercase = /[a-z]/.test(inputValue);
-    if (!isLowercase && hasLowercase) {
-      setActive((prev) => prev + 1);
-      setIsLowercase(true);
-    } else if (isLowercase && !hasLowercase) {
-      setActive((prev) => prev - 1);
-      setIsLowercase(false);
-    }
+    setIsLowercase(/[a-z]/.test(inputValue));
   };
 
   const checkNumber = (inputValue: string) => {
-    const hasNumber = /[0-9]/.test(inputValue);
-    if (!isNumbers && hasNumber) {
-      setActive((prev) => prev + 1);
-      setIsNumbers(true);
-    } else if (isNumbers && !hasNumber) {
-      setActive((prev) => prev - 1);
-      setIsNumbers(false);
-    }
+    setIsNumbers(/[0-9]/.test(inputValue));
   };
 
   const checkSymbol = (inputValue: string) => {
-    const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':",./<>?]/.test(inputValue);
-    if (!isSymbols && hasSymbol) {
-      setActive((prev) => prev + 1);
-      setIsSymbols(true);
-    } else if (isSymbols && !hasSymbol) {
-      setActive((prev) => prev - 1);
-      setIsSymbols(false);
-    }
+    setIsSymbols(/[!@#$%^&*()_+\-=[\]{};':",./<>?]/.test(inputValue));
   };
+
+  const active = [
+    minimumLength,
+    isUppercase,
+    isLowercase,
+    isNumbers,
+    isSymbols,
+  ].filter(Boolean).length;
 
   return {
     password,
     handleInputChange,
     handleGeneratePassword,
     handleCopyPassword,
+    handleShowPassword,
+    showPassword,
     active,
     validations: {
       minimumLength,
