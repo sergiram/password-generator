@@ -174,3 +174,11 @@ button:disabled {
   background: linear-gradient(135deg, #059669, #047857);
   box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
 }
+
+.options-container li.text-red-500 {
+  color: red;
+}
+
+.options-container li.text-green-500 {
+  color: green;
+}
