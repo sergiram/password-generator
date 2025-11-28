@@ -1,4 +1,31 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
+
+const generateRandomPassword = () => {
+  const length = 12;
+  const numbers = '1234567890';
+  const symbols = '!@#$%^&*()_+{}[]|:;<>,.?/~';
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const allChars = numbers + symbols + uppercase + lowercase;
+
+  let newPassword = '';
+  // Ensure at least one of each required type
+  newPassword += numbers[Math.floor(Math.random() * numbers.length)];
+  newPassword += symbols[Math.floor(Math.random() * symbols.length)];
+  newPassword += uppercase[Math.floor(Math.random() * uppercase.length)];
+  newPassword += lowercase[Math.floor(Math.random() * lowercase.length)];
+
+  // Fill the rest
+  for (let i = 4; i < length; i++) {
+    newPassword += allChars[Math.floor(Math.random() * allChars.length)];
+  }
+
+  // Shuffle the password
+  return newPassword
+    .split('')
+    .sort(() => 0.5 - Math.random())
+    .join('');
+};
 
 export const usePasswordValidation = () => {
   const [password, setPassword] = useState<string>('');
@@ -9,7 +36,7 @@ export const usePasswordValidation = () => {
   const [isSymbols, setIsSymbols] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
 
@@ -28,6 +55,16 @@ export const usePasswordValidation = () => {
     checkLowercase(value);
     checkNumber(value);
     checkSymbol(value);
+  };
+
+  const handleGeneratePassword = () => {
+    const newPassword = generateRandomPassword();
+    setPassword(newPassword);
+    checkLength(newPassword.length);
+    checkUppercase(newPassword);
+    checkLowercase(newPassword);
+    checkNumber(newPassword);
+    checkSymbol(newPassword);
   };
 
   const checkLength = (inputLength: number) => {
@@ -88,6 +125,7 @@ export const usePasswordValidation = () => {
   return {
     password,
     handleInputChange,
+    handleGeneratePassword,
     active,
     validations: {
       minimumLength,

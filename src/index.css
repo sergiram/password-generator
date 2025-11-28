@@ -82,7 +82,7 @@ h1 {
   width: 100%;
 }
 
-input[type='text'] {
+input[type='password'] {
   flex: 1;
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--glass-border);
@@ -94,7 +94,7 @@ input[type='text'] {
   transition: all 0.3s ease;
 }
 
-input[type='text']:focus {
+input[type='password']:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px var(--accent-glow);
