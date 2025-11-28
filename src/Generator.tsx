@@ -6,8 +6,10 @@ export const Generator = () => {
     password,
     handleInputChange,
     handleGeneratePassword,
+    handleCopyPassword,
     active,
     validations,
+    inputRef,
   } = usePasswordValidation();
 
   const showError = password.length > 0;
@@ -15,12 +17,13 @@ export const Generator = () => {
   return (
     <div className="container">
       <div className="generator-container">
-        <h1>Generator</h1>
+        <h1>Generator de contraseñas</h1>
         <div className="input-container">
           <input
             type="password"
             value={password}
             onChange={handleInputChange}
+            ref={inputRef}
           />
           <button onClick={() => handleGeneratePassword()}>Generar</button>
         </div>
@@ -52,7 +55,9 @@ export const Generator = () => {
               showError={showError && !validations.isSymbols}
             />
           </ul>
-          <button disabled={active !== 5}>Copiar al portapapeles</button>
+          <button disabled={active !== 5} onClick={() => handleCopyPassword()}>
+            Copiar al portapapeles
+          </button>
         </div>
       </div>
     </div>
