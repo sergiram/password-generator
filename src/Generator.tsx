@@ -16,6 +16,12 @@ export const Generator = () => {
 
   const showError = password.length > 0;
 
+  const getColor = (score: number) => {
+    if (score <= 2) return 'red';
+    if (score <= 4) return 'orange';
+    return 'green';
+  };
+
   return (
     <div className="container">
       <div className="generator-container">
@@ -77,6 +83,15 @@ export const Generator = () => {
             </button>
           </div>
           <button onClick={() => handleGeneratePassword()}>Generar</button>
+        </div>
+        <div className="strength-bar-container">
+          <div
+            className="strength-bar-fill"
+            style={{
+              width: `${(active / 5) * 100}%`,
+              backgroundColor: getColor(active),
+            }}
+          ></div>
         </div>
         <div className="options-container">
           <ul>
