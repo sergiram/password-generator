@@ -21,7 +21,7 @@ export const Generator = () => {
     }
     setPassword(value);
     checkLength(value.length);
-    // checkUppercase(value);
+    checkUppercase(value);
   };
 
   const checkLength = (inputLength: number) => {
@@ -30,6 +30,32 @@ export const Generator = () => {
     if (inputLength >= 8) {
       setActive(active + 1);
       setMinimumLength(true);
+    }
+  };
+
+  const checkUppercase = (inputValue: string) => {
+    console.log('uppercase', uppercase);
+    if (uppercase) return;
+
+    if (inputValue.match(/[A-Z]/)) {
+      setActive(active + 1);
+      setUppercase(true);
+    }
+
+    if (uppercase && !inputValue.match(/[A-Z]/)) {
+      console.log('entra aqui');
+
+      setActive(active - 1);
+      setUppercase(false);
+    }
+  };
+
+  const checkLowercase = (inputValue: string) => {
+    if (lowercase) return;
+
+    if (inputValue.match(/[a-z]/)) {
+      setActive(active + 1);
+      setLowercase(true);
     }
   };
 
